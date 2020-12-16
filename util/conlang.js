@@ -1,14 +1,47 @@
-const consonantMaster = ["b","c","ch","d","dh","f","g","gh","h","j","k","kh","l","m","n","p","ph","q","qu","r","s","sh","t","th","v","w","x","y","z","zh"];
-const vowelMaster = ["a","ah","ae","ai","ao","au","e","i","o","oh","oi","ou","u","ue","y"];
+const consonantMaster = ["b","c","ch","d","dh","f","g","gh","h","j","k","kh","l","m","n","p","ph","q","r","s","sh","t","th","v","w","x","y","z","zh"];
+const vowelMaster = ["a","e","i","o","u","ue","y"];
+const syllableWeightMaster = [1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 5]
 
 // export default class Language {
 class Language {
     constructor() {
-
+        this.footprint = generateSoundFootprint();
+        this.syllableSet = generateSyllableSet(this.footprint);
+        this.lexicon = generateLexicon(this.syllableSet, syllableWeightMaster);
     }
 
-    
+    printLexicon() {
+        console.log(this.lexicon);
+    }
+}
 
+// Generates 500 words using the provided syllable set and weight
+function generateLexicon(syllables, syllableWeight) {
+
+    let newLexicon = [];
+
+    for (let i = 0; i < 100; i++) {
+        newLexicon.push(generateWord(syllables, syllableWeight))
+    }
+
+    return newLexicon;
+
+}
+
+// Generates a word of random length
+// syllables:       set of syllables
+// syllableWeight:  set of word lengths
+function generateWord(syllables, syllableWeight) {
+
+    // Decide how many syllables
+    let wordLength = randomEl(syllableWeight);
+    let newWord = "";
+    
+    for ( let i = 0; i < wordLength; i++ ) {
+        newWord += randomEl(syllables);
+    }
+
+    return newWord;
 }
 
 // Makes a sound footprint object
@@ -33,12 +66,7 @@ function generateSoundFootprint() {
                 newConsonents.push(cons);
 
             }
-            
-        // 25% of adding again (so 1/8 of cases)
-        if ( d100(25) ) {
-            newConsonents.push(cons);
         }
-    }
     }
 
     // Repeat the process for vowels
@@ -57,11 +85,6 @@ function generateSoundFootprint() {
                 newVowels.push(vow);
 
             }
-
-            // 25% of adding again (so 1/8 of cases)
-            if ( d100(25) ) {
-                newVowels.push(vow);
-            }
         }
     }
 
@@ -72,24 +95,13 @@ function generateSoundFootprint() {
     }
 }
 
-// takes a sound footprint object and makes it a phoneme
-function generatePhonemeSet( { con, vow } ) {
-
-    // number of syllables is relative to footprint size
-    for (let i = 0; i < con.length * vow.length * 2; i++) {
-
-        
-
-    }
-}
-
 // Returns a syllable generated from the sound footprint passed
 function generateSyllable( {con, vow} ) {
 
     let newSyllable = "";
 
-    // 80% of words have a beginning consonant
-    if ( d100(80) ) {
+    // 60% of words have a beginning consonant
+    if ( d100(60) ) {
 
         newSyllable += randomEl(con);
         
@@ -103,15 +115,31 @@ function generateSyllable( {con, vow} ) {
     // 5% of syllables have multiple vowels
     if ( d100(5) ) newSyllable += randomEl(vow);
 
-    // 75% of words have ending consonants
-    if ( d100(75) ) {
+    // 50% of words have ending consonants
+    if ( d100(50) ) {
         newSyllable += randomEl(con);
 
-        // 15% of ending consonants are compound consonants
-        if ( d100(15) ) newSyllable += randomEl(con);
+        // 5% of ending consonants are compound consonants
+        if ( d100(5) ) newSyllable += randomEl(con);
     }
 
     return newSyllable;
+}
+
+// takes a sound footprint object and makes it a phoneme
+function generateSyllableSet( footprint ) {
+
+    let newSyllableSet = [];
+
+    // number of syllables is relative to footprint size
+    for (let i = 0; i < footprint.con.length * footprint.vow.length * 2; i++) {
+
+        newSyllableSet.push( generateSyllable(footprint) );
+
+    }
+
+    return newSyllableSet;
+
 }
 
 // Returns a random element of the array passed
@@ -124,4 +152,5 @@ function d100(num) {
     return (Math.random() * 100) < num; 
 }
 
-console.log(generateSoundFootprint());
+const fakeLanguage = new Language();
+fakeLanguage.printLexicon();
