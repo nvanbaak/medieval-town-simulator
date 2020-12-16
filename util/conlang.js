@@ -1,9 +1,8 @@
-const consonantMaster = ["b","c","ch","d","dh","f","g","gh","h","j","k","kh","l","m","n","p","ph","q","r","s","sh","t","th","v","w","x","y","z","zh"];
+const consonantMaster = ["b","c","ch","d","f","g","h","j","k","l","m","n","p",,"q","r","sh","t","th","v","w","x","y","z"];
 const vowelMaster = ["a","e","i","o","u","ue","y"];
 const syllableWeightMaster = [1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 5]
 
-// export default class Language {
-class Language {
+export default class Language {
     constructor() {
         this.footprint = generateSoundFootprint();
         this.syllableSet = generateSyllableSet(this.footprint);
@@ -12,6 +11,10 @@ class Language {
 
     printLexicon() {
         console.log(this.lexicon);
+    }
+
+    randomWord() {
+        return randomEl(this.lexicon);
     }
 }
 
@@ -151,6 +154,3 @@ function randomEl(array) {
 function d100(num) {
     return (Math.random() * 100) < num; 
 }
-
-const fakeLanguage = new Language();
-fakeLanguage.printLexicon();
