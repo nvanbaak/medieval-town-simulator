@@ -78,27 +78,40 @@ function generatePhonemeSet( { con, vow } ) {
     // number of syllables is relative to footprint size
     for (let i = 0; i < con.length * vow.length * 2; i++) {
 
-        let newSyllable = "";
-
-        // beginning consonant (or not)
-        newSyllable += randomEl(con)
-
-
-        // vowel
-
-        // diphthong (or not)
-
-        // ending consonant (or not)
-
-
-
-
-
-
-
-
+        
 
     }
+}
+
+// Returns a syllable generated from the sound footprint passed
+function generateSyllable( {con, vow} ) {
+
+    let newSyllable = "";
+
+    // 80% of words have a beginning consonant
+    if ( d100(80) ) {
+
+        newSyllable += randomEl(con);
+        
+        // 10% of beginning consonants are compound consonants
+        if ( d100(10) ) newSyllable += randomEl(con);
+    }
+
+    // All syllables have a vowel
+    newSyllable += randomEl(vow);
+
+    // 5% of syllables have multiple vowels
+    if ( d100(5) ) newSyllable += randomEl(vow);
+
+    // 75% of words have ending consonants
+    if ( d100(75) ) {
+        newSyllable += randomEl(con);
+
+        // 15% of ending consonants are compound consonants
+        if ( d100(15) ) newSyllable += randomEl(con);
+    }
+
+    return newSyllable;
 }
 
 // Returns a random element of the array passed
