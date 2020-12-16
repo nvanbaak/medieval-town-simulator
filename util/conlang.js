@@ -1,5 +1,5 @@
 const consonantMaster = ["b","c","ch","d","dh","f","g","gh","h","j","k","kh","l","m","n","p","ph","q","qu","r","s","sh","t","th","v","w","x","y","z","zh"];
-const vowelMaster = ["a","ae","ai","ao","au","e","i","o","oi","ou","u","ue","y"];
+const vowelMaster = ["a","ah","ae","ai","ao","au","e","i","o","oh","oi","ou","u","ue","y"];
 
 // export default class Language {
 class Language {
@@ -23,21 +23,22 @@ function generateSoundFootprint() {
     for (cons of consonantMaster) {
 
         // 50% chance nothing happens
-        if (flipCoin()) {
+        if ( d100(50) ) {
             
             // Add it to the list
             newConsonents.push(cons);
             
             // 50% chance (so 1/4 of cases) of adding it an additional time
-            if (flipCoin() ) {
+            if ( d100(50) ) {
                 newConsonents.push(cons);
 
-                // One last time
-                if (flipCoin()) {
-                    newConsonents.push(cons);
-                }
             }
+            
+        // 25% of adding again (so 1/8 of cases)
+        if ( d100(25) ) {
+            newConsonents.push(cons);
         }
+    }
     }
 
     // Repeat the process for vowels
@@ -46,19 +47,20 @@ function generateSoundFootprint() {
     for (vow of vowelMaster) {
 
         // 50% chance nothing happens
-        if (flipCoin()) {
+        if ( d100(50) ) {
             
             // Add it to the list
             newVowels.push(vow);
             
             // 50% chance (so 1/4 of cases) of adding it an additional time
-            if (flipCoin() ) {
+            if ( d100(50) ) {
                 newVowels.push(vow);
 
-                // One last time
-                if (flipCoin() && flipCoin()) {
-                    newVowels.push(vow);
-                }
+            }
+
+            // 25% of adding again (so 1/8 of cases)
+            if ( d100(25) ) {
+                newVowels.push(vow);
             }
         }
     }
@@ -73,19 +75,30 @@ function generateSoundFootprint() {
 // takes a sound footprint object and makes it a phoneme
 function generatePhonemeSet( { con, vow } ) {
 
-    // number of phonemes is relative to footprint size
-    for (let i = 0; i < con.length * vow.length * ; i++) {
+    // number of syllables is relative to footprint size
+    for (let i = 0; i < con.length * vow.length * 2; i++) {
 
-        
+        let newSyllable = "";
+
+        // beginning consonant (or not)
+        newSyllable += randomEl(con)
+
+
+        // vowel
+
+        // diphthong (or not)
+
+        // ending consonant (or not)
+
+
+
+
+
+
 
 
 
     }
-    
-
-
-
-
 }
 
 // Returns a random element of the array passed
@@ -93,9 +106,9 @@ function randomEl(array) {
     return array[Math.floor(Math.random() * array.length)]
 }
 
-// Returns true 50% of the time
-function flipCoin() {
-    return Math.random() > 0.5; 
+// Rolls a d100 and returns true based on the threshold passed (e.g. d100(80) returns true 80% of the time)
+function d100(num) {
+    return (Math.random() * 100) < num; 
 }
 
 console.log(generateSoundFootprint());
