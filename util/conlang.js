@@ -1,9 +1,7 @@
-const consonantMaster = ["b","c","ch","d","f","g","h","j","k","l","m","n","p",,"q","r","sh","t","th","v","w","x","y","z"];
-const vowelMaster = ["a","e","i","o","u","ue","y"];
-const syllableWeightMaster = [1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 5]
-
-export default class Language {
+module.exports = class Language {
     constructor() {
+        const syllableWeightMaster = [1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 5];
+
         this.footprint = generateSoundFootprint();
         this.syllableSet = generateSyllableSet(this.footprint);
         this.lexicon = generateLexicon(this.syllableSet, syllableWeightMaster);
@@ -49,6 +47,9 @@ function generateWord(syllables, syllableWeight) {
 
 // Makes a sound footprint object
 function generateSoundFootprint() {
+
+    const consonantMaster = ["b","c","ch","d","f","g","h","j","k","l","m","n","p",,"q","r","sh","t","th","v","w","x","y","z"];
+    const vowelMaster = ["a","e","i","o","u","ue","y"];
 
     // define new consonant set
     let newConsonents = [];

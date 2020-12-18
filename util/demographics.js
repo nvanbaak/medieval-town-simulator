@@ -1,10 +1,6 @@
-import Language from "./conlang.js";
+const Language = require("./conlang.js");
 
-require("./conlang.js");
-
-
-// export default class Population {
-class Population {
+module.exports = class Population {
 constructor(popSize, lifeExpectancy) {
 
         this.popSize = popSize;
@@ -13,19 +9,16 @@ constructor(popSize, lifeExpectancy) {
         this.people = [];
         
         for (let i = 0; i < popSize; i++ ) {
-            this.people.push(generatePerson(lifeExpectancy))
+            this.people.push(generatePerson(this.language.randomWord(), lifeExpectancy))
         }
     }
 
-    print() {
-        console.log(this.people);
+    printPop() {
+        console.table(this.people);
     }
-
-
 }
 
 function generatePerson(name, lifeExpectancy) {
-
     return {
         name: name,
         age: generateAge(lifeExpectancy)
@@ -36,10 +29,7 @@ function generatePerson(name, lifeExpectancy) {
 function generateAge(lifeExpectancy) {
 
     // people sometimes live past life expectancy
-    let oldAge = Math.ceiling(lifeExpectancy * 1.1);
+    let oldAge = Math.ceil(lifeExpectancy * 1.1);
 
     return Math.floor(Math.random() * oldAge);
 }
-
-const peasants = new Population(5000, 50);
-peasants.print();
