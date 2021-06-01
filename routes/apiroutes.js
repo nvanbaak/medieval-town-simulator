@@ -10,11 +10,15 @@ module.exports = function(app) {
 
     });
 
-    app.get("/api/population", function (req, res) {
+    // app.get("/api/population", function (req, res) {
+    // });
 
-        newTown = new Population(req.popSize, req.lifeExpect)
+    app.post("/api/population", function ({ body }, res) {
+
+        newTown = new Population(body.popSize, body.lifeExpect)
+
         res.json(newTown)
 
-    });
+    })
 
 };

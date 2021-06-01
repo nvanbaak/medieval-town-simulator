@@ -7,7 +7,7 @@ constructor(popSize, lifeExpectancy) {
         this.lifeExpectancy = lifeExpectancy;
         this.language = new Language();
         this.people = [];
-        
+
         for (let i = 0; i < popSize; i++ ) {
             this.people.push(generatePerson(this.language.randomWord(), lifeExpectancy))
         }
@@ -24,7 +24,6 @@ function generatePerson(name, lifeExpectancy) {
         age: generateAge(lifeExpectancy)
     }
 }
-
 
 function generateAge(lifeExpectancy) {
 

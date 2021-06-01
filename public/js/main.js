@@ -13,23 +13,25 @@ $(document).ready(function() {
     // Generates town / culture information
     townGenBtn.click(function() {
 
-        $.ajax("/api/population", {
-            type: "GET",
-            popSize: 50,
+        $.post("/api/population", {
+            popSize: 0,
             lifeExpect: 50
         }).then(newTown => {
 
-            // load town
-            town = newTown
-            console.log(town)
 
-            // Load language
+            // load town and language
+            town = newTown;
             lang = town.language;
-            console.log(lang)
+
+            updateConsole();
 
             // Display town data
+            townData.empty()
             townData
-                .append($("<td>"))
+                .append($("<td>").text(capitalize(lang.lexicon[0])))
+                .append($("<td>").text(lang.name))
+                .append($("<td>").text(town.popSize))
+                .append($("<td>").text(town.lifeExpectancy))
 
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
@@ -53,11 +55,23 @@ $(document).ready(function() {
             )
         }
 
-    })
+    });
 
 });
 
 function randomWord() {
     let index = Math.floor(Math.random() * 500)
     return lang.lexicon[index]
+}
+
+function capitalize(word) {
+
+    let newWord = word.charAt(0).toUpperCase() + word.slice(1);
+    return newWord;
+}
+
+function updateConsole() {
+    console.clear();
+    console.log(town);
+    console.log(lang);
 }
