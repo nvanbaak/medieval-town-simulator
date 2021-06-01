@@ -31,12 +31,7 @@ $(document).ready(function() {
             updateConsole();
 
             // Display town data
-            townData.empty()
-            townData
-                .append($("<td>").text(capitalize(lang.lexicon[0].text)))
-                .append($("<td>").text(lang.name))
-                .append($("<td>").text(town.popSize))
-                .append($("<td>").text(town.lifeExpectancy))
+            updateTownDisplay()
 
             // Update town name across page
             townNameSpan.text(capitalize(lang.lexicon[0].text))
@@ -70,7 +65,7 @@ $(document).ready(function() {
 
             // Get random peasant information within culture parameters
             myJob = jobList[Math.floor(Math.random() * jobList.length)];
-            myLifeExp = Math.floor(Math.random() * lifeExp * 1.1);
+            myLifeExp = Math.floor(Math.random() * lifeExp * 1.2);
 
             // Make new peasant, push to the appropriate places
             newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
@@ -106,6 +101,8 @@ $(document).ready(function() {
 
         }
 
+        updateTownDisplay();
+
         // Clear gen to avoid adding duplicates
         clearGen();
         addPeasantBtn.hide()
@@ -113,6 +110,16 @@ $(document).ready(function() {
     });
 
 });
+
+function updateTownDisplay() {
+    // Display town data
+    townData.empty()
+    townData
+        .append($("<td>").text(capitalize(lang.lexicon[0].text)))
+        .append($("<td>").text(lang.name))
+        .append($("<td>").text(town.popSize))
+        .append($("<td>").text(town.lifeExpectancy))
+}
 
 function randomWord(minLength = 1, maxLength = 10) {
 
