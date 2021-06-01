@@ -59,10 +59,19 @@ $(document).ready(function() {
         // Start on the left side
         let left = true;
 
+        // Get culture information
+        let jobList = town.economy.jobs;
+        let lifeExp = town.lifeExpectancy;
+        let minNameSize = 2;
+
         // Make ten peasants, store in data and print to page
         for (i = 0; i < 10; i++) {
 
-            newPeasant = randomWord(2)
+            // Get random pesant information within culture parameters
+            myJob = joblist[Math.floor(Math.random() * jobList.length)];
+            myLifeExp = Math.floor(Math.random() * lifeExp * 1.1);
+
+            newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
 
             peasantGen.push(newPeasant);
 
@@ -120,4 +129,12 @@ function clearGen() {
     nameCol1.empty();
     nameCol2.empty();
     peasantGen = [];
+}
+
+class Peasant {
+    constructor(name, job, age) {
+        this.name = name;
+        this.job = job;
+        this.age = age;
+    }
 }
