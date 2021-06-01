@@ -5,6 +5,8 @@ module.exports = class Language {
         this.footprint = generateSoundFootprint();
         this.syllableSet = generateSyllableSet(this.footprint);
         this.lexicon = generateLexicon(this.syllableSet, syllableWeightMaster);
+
+        this.name = capitalize(generateWord(this.syllableSet, syllableWeightMaster))
     }
 
     printLexicon() {
@@ -42,7 +44,11 @@ function generateWord(syllables, syllableWeight) {
         newWord += randomEl(syllables);
     }
 
-    return newWord;
+    if (newWord.length > 1) {
+        return newWord;
+    } else {
+        return this.generateWord(syllables, syllableWeight)
+    }
 }
 
 // Makes a sound footprint object
@@ -153,4 +159,9 @@ function randomEl(array) {
 // Rolls a d100 and returns true based on the threshold passed (e.g. d100(80) returns true 80% of the time)
 function d100(num) {
     return (Math.random() * 100) < num; 
+}
+
+function capitalize(string) {
+    newString = string.charAt(0).toUpperCase() + string.slice(1);
+    return newString;
 }
