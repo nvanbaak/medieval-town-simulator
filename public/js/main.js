@@ -74,7 +74,7 @@ $(document).ready(function() {
 
             // Build and append list object
             listObj = $("<li>")
-                .html("<strong>"+newPeasant.name+"</strong>, " + newPeasant.job + ", " + newPeasant.age)
+                .html("<strong>"+newPeasant.name+"</strong>, " + newPeasant.getJob() + ", " + newPeasant.age)
 
             if (left) {
                 nameCol1.append(listObj)
@@ -155,12 +155,16 @@ class Peasant {
     constructor(name, job, age) {
         this.name = capitalize(name);
         this.age = age;
+        this.job = job;
+    }
+
+    getJob() {
         if (this.age > 11) {
-            this.job = job;
+            return this.job;
         } else if (this.age > 6) {
-            this.job = "apprentice " + job;
+            return "apprentice " + this.job;
         } else {
-            this.job = "child"
+            return "child"
         }
     }
 }
