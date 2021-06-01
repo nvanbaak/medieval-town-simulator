@@ -13,7 +13,6 @@ module.exports = function(app) {
     app.get("/api/population", function (req, res) {
 
         newTown = new Population(req.popSize, req.lifeExpect)
-
         res.json(newTown)
 
     });

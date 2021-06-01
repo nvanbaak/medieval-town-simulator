@@ -7,7 +7,6 @@ const townGenBtn = $("#townGen");
 let town;
 let lang;
 
-
 $(document).ready(function() {
 
     // Generates town / culture information
@@ -18,9 +17,10 @@ $(document).ready(function() {
             popSize: 50,
             lifeExpect: 50
         }).then(newTown => {
-        
+
             // load town
             town = newTown
+            console.log(town)
 
             // Load language
             lang = town.language;
@@ -28,10 +28,10 @@ $(document).ready(function() {
 
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
-        
+
         });
 
-    })
+    });
 
     // Generates ten peasants and lists them on the page
     nameGenBtn.click(function() {
