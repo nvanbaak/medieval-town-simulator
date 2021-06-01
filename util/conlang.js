@@ -48,7 +48,7 @@ function generateWord(syllables, syllableWeight) {
 // Makes a sound footprint object
 function generateSoundFootprint() {
 
-    const consonantMaster = ["b","c","ch","d","f","g","h","j","k","l","m","n","p",,"q","r","sh","t","th","v","w","x","y","z"];
+    const consonantMaster = ["b","c","ch","d","f","g","h","j","k","l","m","n","p","q","r","sh","t","th","v","w","x","y","z"];
     const vowelMaster = ["a","e","i","o","u","ue","y"];
 
     // define new consonant set
@@ -68,7 +68,6 @@ function generateSoundFootprint() {
             // 50% chance (so 1/4 of cases) of adding it an additional time
             if ( d100(50) ) {
                 newConsonents.push(cons);
-
             }
         }
     }
@@ -78,14 +77,14 @@ function generateSoundFootprint() {
 
     for (vow of vowelMaster) {
 
-        // 50% chance nothing happens
-        if ( d100(50) ) {
+        // 80% we add the vowel
+        if ( d100(80) ) {
             
             // Add it to the list
             newVowels.push(vow);
             
-            // 50% chance (so 1/4 of cases) of adding it an additional time
-            if ( d100(50) ) {
+            // Slight chance to add it again
+            if ( d100(20) ) {
                 newVowels.push(vow);
 
             }
