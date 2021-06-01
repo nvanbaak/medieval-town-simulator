@@ -47,7 +47,7 @@ function generateWord(syllables, syllableWeight) {
     if (newWord.length > 1) {
         return newWord;
     } else {
-        return this.generateWord(syllables, syllableWeight)
+        return generateWord(syllables, syllableWeight)
     }
 }
 

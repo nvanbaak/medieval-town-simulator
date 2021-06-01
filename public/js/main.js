@@ -4,19 +4,27 @@ const nameCol2 = $("#nameGenCol2");
 
 const townGenBtn = $("#townGen");
 
+let town;
 let lang;
+
 
 $(document).ready(function() {
 
+    // Generates town / culture information
     townGenBtn.click(function() {
 
-        $.ajax("/api/language", {
-            type: "GET"
-        }).then(newLang => {
+        $.ajax("/api/population", {
+            type: "GET",
+            popSize: 50,
+            lifeExpect: 50
+        }).then(newTown => {
         
+            // load town
+            town = newTown
+
             // Load language
-            console.log(newLang)
-            lang = newLang;
+            lang = town.language;
+            console.log(lang)
 
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
