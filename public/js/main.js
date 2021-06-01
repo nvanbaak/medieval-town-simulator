@@ -18,7 +18,6 @@ $(document).ready(function() {
             lifeExpect: 50
         }).then(newTown => {
 
-
             // load town and language
             town = newTown;
             lang = town.language;
@@ -28,7 +27,7 @@ $(document).ready(function() {
             // Display town data
             townData.empty()
             townData
-                .append($("<td>").text(capitalize(lang.lexicon[0])))
+                .append($("<td>").text(capitalize(lang.lexicon[0].text)))
                 .append($("<td>").text(lang.name))
                 .append($("<td>").text(town.popSize))
                 .append($("<td>").text(town.lifeExpectancy))
@@ -37,7 +36,6 @@ $(document).ready(function() {
             nameGenBtn.prop("disabled", false);
 
         });
-
     });
 
     // Generates ten peasants and lists them on the page
@@ -59,9 +57,16 @@ $(document).ready(function() {
 
 });
 
-function randomWord() {
-    let index = Math.floor(Math.random() * 500)
-    return lang.lexicon[index]
+function randomWord(minLength = 1, maxLength = 10) {
+
+    let index = Math.floor(Math.random() * 500);
+    let selection = lang.lexicon[index];
+
+    if (selection.syllables >= minLength && selection.syllables <= maxLength) {
+        return selection.text;
+    } else {
+        return randomWord(minLength, maxLength)
+    }
 }
 
 function capitalize(word) {
