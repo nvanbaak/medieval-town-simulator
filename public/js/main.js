@@ -9,6 +9,8 @@ const nameCol2 = $("#nameGenCol2");
 
 const addPeasantBtn = $("#PeasantAddBtn").hide();
 
+let peasantGen = [];
+
 let town;
 let lang;
 
@@ -48,27 +50,44 @@ $(document).ready(function() {
     // Generates ten peasants and lists them on the page
     nameGenBtn.click(function() {
 
+        // Clear any previous gen data
         nameCol1.empty()
         nameCol2.empty()
+        peasantGen = []
 
-        for (i = 0; i < 5; i++) {
-            nameCol1.append(
-                $("<li>").text(randomWord(2))
-            )
-            nameCol2.append(
-                $("<li>").text(randomWord(2))
-            )
+        // Start on the left side
+        let left = true;
+
+        // Make ten peasants, store in data and print to page
+        for (i = 0; i < 10; i++) {
+
+            newPeasant = randomWord(2)
+
+            peasantGen.push(newPeasant);
+
+            if (left) {
+                nameCol1.append(
+                    $("<li>").text(newPeasant)
+                )
+                left = false;
+            } else {
+                nameCol2.append(
+                    $("<li>").text(randomWord(2))
+                )
+                left = true;
+            }
         }
 
         addPeasantBtn.show();
 
     });
 
-    // addPeasantBtn.click(function() {
+    // Adds the peasants from the generation box to the town
+    addPeasantBtn.click(function() {
 
 
 
-    // });
+    });
 
 });
 
