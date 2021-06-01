@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Routes
 require('./routes/htmlroutes')(app);
+require('./routes/apiroutes')(app);
 
 // Database here if you're using one
 
