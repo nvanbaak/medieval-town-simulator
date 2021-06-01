@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Routes
-const routes = require('./routes');
+const routes = require('./routes/htmlroutes');
 app.use(routes)
 
 // Database here if you're using one
