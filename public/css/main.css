@@ -36,15 +36,11 @@ hr {
 }
 
 .nameBox {
-    width: 60%;
+    width: 75%;
     margin: 10px auto 10px auto;
     display: flex;
     justify-content: space-evenly;
     border: 1px dotted gray;
-}
-
-.nameCol {
-    text-transform: capitalize;
 }
 
 table {

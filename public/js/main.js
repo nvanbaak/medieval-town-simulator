@@ -60,6 +60,7 @@ $(document).ready(function() {
         let left = true;
 
         // Get culture information
+        updateConsole();
         let jobList = town.economy.jobs;
         let lifeExp = town.lifeExpectancy;
         let minNameSize = 2;
@@ -68,23 +69,23 @@ $(document).ready(function() {
         for (i = 0; i < 10; i++) {
 
             // Get random peasant information within culture parameters
-            myJob = joblist[Math.floor(Math.random() * jobList.length)];
+            myJob = jobList[Math.floor(Math.random() * jobList.length)];
             myLifeExp = Math.floor(Math.random() * lifeExp * 1.1);
 
             // Make new peasant, push to the appropriate places
             newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
-            
+
             peasantGen.push(newPeasant);
 
+            // Build and append list object
+            listObj = $("<li>")
+                .html("<strong>"+newPeasant.name+"</strong>, " + newPeasant.job + ", " + newPeasant.age)
+
             if (left) {
-                nameCol1.append(
-                    $("<li>").text(newPeasant)
-                )
+                nameCol1.append(listObj)
                 left = false;
             } else {
-                nameCol2.append(
-                    $("<li>").text(randomWord(2))
-                )
+                nameCol2.append(listObj)
                 left = true;
             }
         }
@@ -97,12 +98,17 @@ $(document).ready(function() {
     // Adds the peasants from the generation box to the town
     addPeasantBtn.click(function() {
 
+        // Add all of the peasants to the town
         for (peasant of peasantGen) {
 
             town.people.push(peasant);
             town.popSize++;
 
         }
+
+        // Clear gen to avoid adding duplicates
+        clearGen();
+        addPeasantBtn.hide()
 
     });
 
@@ -140,8 +146,14 @@ function clearGen() {
 
 class Peasant {
     constructor(name, job, age) {
-        this.name = name;
-        this.job = job;
+        this.name = capitalize(name);
         this.age = age;
+        if (this.age > 11) {
+            this.job = job;
+        } else if (this.age > 6) {
+            this.job = "apprentice " + job;
+        } else {
+            this.job = "child"
+        }
     }
 }
