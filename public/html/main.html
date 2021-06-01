@@ -13,27 +13,32 @@
     <body>
         <main>
             <h1>Medival Town Simulator</h1>
+
             <hr>
+
             <section class="flexbox">
                 <h2>Build a Town!</h2>
+                <button id="townGen">Build</button>
+                <div class="output">
+
+                </div>
             </section>
+
             <hr>
+
             <section class="flexbox">
                 <h2>Generate Some Peasants!</h2>
-                <button id="nameGen">Generate</button>
+                <button id="nameGen" disabled="true">Generate</button>
                 <div class="nameBox">
                     <div class="col" >
-                        <ul id="nameGenCol1" class="nameCol">
-
-                        </ul>
+                        <ul id="nameGenCol1" class="nameCol"></ul>
                     </div>
-                    
                     <div class="col" >
-                        <ul id="nameGenCol2" class="nameCol">
-                        </ul>
+                        <ul id="nameGenCol2" class="nameCol"></ul>
                     </div>
                 </div>
             </section>
+
         </main>
 
         <script src="../js/main.js"></script>

@@ -2,22 +2,30 @@ const nameGenBtn = $("#nameGen");
 const nameCol1 = $("#nameGenCol1");
 const nameCol2 = $("#nameGenCol2");
 
-const names = ["Bob", "Joe", "Calvin", "Hobbes", "Whitman", "Donne", "Bach", "Lincoln", "Tesla", "Galvani"];
+const townGenBtn = $("#townGen");
 
 let lang;
 
-$.ajax("/api/language", {
-    type: "GET"
-}).then(newLang => {
-
-    lang = newLang;
-    console.log(newLang)
-
-});
-
-
 $(document).ready(function() {
 
+    townGenBtn.click(function() {
+
+        $.ajax("/api/language", {
+            type: "GET"
+        }).then(newLang => {
+        
+            // Load language
+            console.log(newLang)
+            lang = newLang;
+
+            // Enable peasant generation
+            nameGenBtn.prop("disabled", false);
+        
+        });
+
+    })
+
+    // Generates ten peasants and lists them on the page
     nameGenBtn.click(function() {
 
         nameCol1.empty()
