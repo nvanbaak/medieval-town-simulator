@@ -3,6 +3,7 @@ const nameCol1 = $("#nameGenCol1");
 const nameCol2 = $("#nameGenCol2");
 
 const townGenBtn = $("#townGen");
+const townData = $("#townData");
 
 let town;
 let lang;
@@ -25,6 +26,10 @@ $(document).ready(function() {
             // Load language
             lang = town.language;
             console.log(lang)
+
+            // Display town data
+            townData
+                .append($("<td>"))
 
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);

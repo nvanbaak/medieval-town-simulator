@@ -50,5 +50,27 @@ hr {
 table {
     width: 60%;
     margin: 30px auto 20px auto;
+}
+
+tr {
+    display: flex;
     justify-content: space-around;
+}
+
+tr>* {
+    width: 100%;
+    padding: 5px;
+}
+
+th {
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+td {
+    border-right: 1px solid black;
+}
+
+th:last-child, td:last-child {
+    border-right: 0px;
 }
