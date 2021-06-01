@@ -67,12 +67,13 @@ $(document).ready(function() {
         // Make ten peasants, store in data and print to page
         for (i = 0; i < 10; i++) {
 
-            // Get random pesant information within culture parameters
+            // Get random peasant information within culture parameters
             myJob = joblist[Math.floor(Math.random() * jobList.length)];
             myLifeExp = Math.floor(Math.random() * lifeExp * 1.1);
 
+            // Make new peasant, push to the appropriate places
             newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
-
+            
             peasantGen.push(newPeasant);
 
             if (left) {
@@ -88,6 +89,7 @@ $(document).ready(function() {
             }
         }
 
+        // Now that we have peasants we can unhide the Add Peasant button if it was hidden
         addPeasantBtn.show();
 
     });
@@ -95,7 +97,12 @@ $(document).ready(function() {
     // Adds the peasants from the generation box to the town
     addPeasantBtn.click(function() {
 
+        for (peasant of peasantGen) {
 
+            town.people.push(peasant);
+            town.popSize++;
+
+        }
 
     });
 
