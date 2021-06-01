@@ -37,7 +37,7 @@ hr {
 
 .nameBox {
     width: 60%;
-    margin: 10px auto auto;
+    margin: 10px auto 10px auto;
     display: flex;
     justify-content: space-evenly;
     border: 1px dotted gray;
@@ -69,6 +69,7 @@ th {
 
 td {
     border-right: 1px solid black;
+    text-align: center;
 }
 
 th:last-child, td:last-child {

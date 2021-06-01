@@ -1,9 +1,13 @@
+const townGenBtn = $("#townGen");
+const townData = $("#townData");
+
+const townNameSpan = $(".townNameSpan");
+
 const nameGenBtn = $("#nameGen");
 const nameCol1 = $("#nameGenCol1");
 const nameCol2 = $("#nameGenCol2");
 
-const townGenBtn = $("#townGen");
-const townData = $("#townData");
+const addPeasantBtn = $("#PeasantAddBtn").hide();
 
 let town;
 let lang;
@@ -32,6 +36,9 @@ $(document).ready(function() {
                 .append($("<td>").text(town.popSize))
                 .append($("<td>").text(town.lifeExpectancy))
 
+            // Update town name across page
+            townNameSpan.text(capitalize(lang.lexicon[0].text))
+
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
 
@@ -46,14 +53,22 @@ $(document).ready(function() {
 
         for (i = 0; i < 5; i++) {
             nameCol1.append(
-                $("<li>").text(randomWord())
+                $("<li>").text(randomWord(2))
             )
             nameCol2.append(
-                $("<li>").text(randomWord())
+                $("<li>").text(randomWord(2))
             )
         }
 
+        addPeasantBtn.show();
+
     });
+
+    // addPeasantBtn.click(function() {
+
+
+
+    // });
 
 });
 
