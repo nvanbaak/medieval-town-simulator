@@ -1,4 +1,5 @@
 const Language = require("./conlang.js");
+const Economy = require("./economy.js");
 
 module.exports = class Population {
 constructor(popSize, lifeExpectancy) {
@@ -6,6 +7,8 @@ constructor(popSize, lifeExpectancy) {
         this.popSize = popSize;
         this.lifeExpectancy = lifeExpectancy;
         this.language = new Language();
+        this.economy = new Economy();
+        
         this.people = [];
 
         for (let i = 0; i < popSize; i++ ) {

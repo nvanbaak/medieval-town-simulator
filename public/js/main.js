@@ -44,6 +44,9 @@ $(document).ready(function() {
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
 
+            // Clear peasant gen and hide add button
+            clearGen();
+            addPeasantBtn.hide();
         });
     });
 
@@ -51,9 +54,7 @@ $(document).ready(function() {
     nameGenBtn.click(function() {
 
         // Clear any previous gen data
-        nameCol1.empty()
-        nameCol2.empty()
-        peasantGen = []
+        clearGen();
 
         // Start on the left side
         let left = true;
@@ -113,4 +114,10 @@ function updateConsole() {
     console.clear();
     console.log(town);
     console.log(lang);
+}
+
+function clearGen() {
+    nameCol1.empty();
+    nameCol2.empty();
+    peasantGen = [];
 }
