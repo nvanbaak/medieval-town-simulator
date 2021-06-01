@@ -25,5 +25,5 @@ app.use(routes)
 
 // Listener function
 app.listen(PORT, function() {
-    console.log('Listening on PORT ' + PORT);
+    console.log('Listening on PORT http://localhost:' + PORT);
 });
