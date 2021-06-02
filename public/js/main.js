@@ -127,8 +127,8 @@ $(document).ready(function() {
     // Runs one step of the simulation
     function cycleSimulation() {
         // Setup variables
-        let oldAge = town.lifeExpectancy * 0.8;
-        let maxLife = town.lifeExpectancy * 1.2;
+        let oldAge = town.lifeExpectancy * 0.9;
+        let maxLife = town.lifeExpectancy * 1.4;
         let dangerZone = maxLife - oldAge;
 
         // Age up everyone
