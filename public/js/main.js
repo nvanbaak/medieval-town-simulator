@@ -107,7 +107,6 @@ $(document).ready(function() {
         for (peasant of peasantGen) {
 
             town.people.push(peasant);
-            town.popSize++;
 
         }
 
@@ -179,7 +178,7 @@ $(document).ready(function() {
         townData
             .append($("<td>").text(capitalize(lang.lexicon[0].text)))
             .append($("<td>").text(lang.name))
-            .append($("<td>").text(town.popSize))
+            .append($("<td>").text(town.people.length))
             .append($("<td>").text(town.lifeExpectancy))
     }
     

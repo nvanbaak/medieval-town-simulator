@@ -4,7 +4,6 @@ const Economy = require("./economy.js");
 module.exports = class Population {
 constructor(popSize, lifeExpectancy) {
 
-        this.popSize = popSize;
         this.lifeExpectancy = lifeExpectancy;
         this.language = new Language();
         this.economy = new Economy();
