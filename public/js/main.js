@@ -48,6 +48,7 @@ $(document).ready(function() {
 
             // Enable peasant generation
             nameGenBtn.prop("disabled", false);
+            runSimBtn.prop("disabled", false);
 
             // Clear peasant gen and hide add button
             clearGen();
@@ -112,7 +113,12 @@ $(document).ready(function() {
 
     // Cycles the simulation when the button is pressed
     runSimBtn.click(function() {
-        cycleSimulation();
+        if (town.people.length > 0) {
+            cycleSimulation();
+        } else {
+            simLog = []
+            postToSimOutput("Your town is empty. Add some peasants to start the simulation.")
+        }
     });
 
     // Runs one step of the simulation
