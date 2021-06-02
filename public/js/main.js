@@ -190,20 +190,47 @@ $(document).ready(function() {
             // Next, resolve pregnancies
             else if (peasant.isPregnant) {
                 let momSurvives = true;
-                let kidSurvives = true;
 
-                // Check if both parties survive the experience
+                // Check if the mom died
                 if (Math.random() < childbirthMort) {
                     momSurvives = false;
                 }
+
+                // Check if the kid died
                 if (Math.random() < stillbornRate) {
-                    kidSurvives = false;
-                }
 
-                // Write the appropriate messages
-                if (momSurvives && kidSurvives) {
+                    // Announcement changes based on mom's survival
+                    if (momSurvives) {
+                        postToSimOutput(peasant.name + "'s baby was stillborn.")
+                        peasant.isPregnant = false;
+                    } else {
+                        postToSimOutput(peasant.name + " and her baby have died in childbirth.")
+                        town.people.splice(i, 1);
+                    }
 
-                    // newPeasant = new Peasant()
+                } 
+                // If the kid lived, generate them and add them to the town
+                else {
+
+                    let newPeasant = makeRandomPeasant(town);
+                    newPeasant.age = 0;
+                    let babySex = ((newPeasant.sex == "m") ? "boy" : "girl");
+                    town.people.append(newPeasant);
+
+                    // As before, announcement changes based on whether the mom survived
+                    if (momSurvives) {
+
+                        postToSimOutput(peasant.name + " gave birth to a baby " + babySex + "!  " + "She names " + newPeasant.pronouns[1] + " " + newPeasant.name + ".");
+
+                        peasant.isPregnant = false;
+
+                    } else {
+
+                        postToSimOutput(peasant.name + " died giving birth to a baby " + babySex + "!  " + "Her grieving relatives name the child " + newPeasant.name + ".")
+
+                        town.people.splice(i, 1);
+
+                    }
 
                 }
 
@@ -292,7 +319,7 @@ $(document).ready(function() {
         peasantGen = [];
     }
 
-    function makeRandomPeasant(town, minNameSize) {
+    function makeRandomPeasant(town, minNameSize = 2) {
         let jobList = town.economy.jobs;
         let lifeExp = town.lifeExpectancy;
         let minNameSize = 2;
@@ -318,12 +345,16 @@ $(document).ready(function() {
             if (sex == null) {
                 if (Math.random < 0.5) {
                     this.sex = "m";
+                    this.pronouns = ["he","him","his"];
                 } else {
                     this.sex = "f";
+                    this.pronouns = ["she","her","hers"];
                 }
             } else {
                 this.sex = sex;
             }
+
+
         }
 
         getJob() {
