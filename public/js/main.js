@@ -1,30 +1,29 @@
-const townGenBtn = $("#townGen");
-const townData = $("#townData");
-
-const townNameSpan = $(".townNameSpan");
-
-const nameGenBtn = $("#nameGen");
-const nameCol1 = $("#nameGenCol1");
-const nameCol2 = $("#nameGenCol2");
-
-const addPeasantBtn = $("#peasantAddBtn").hide();
-
-let peasantGen = [];
-
-let town;
-let lang;
-
 $(document).ready(function() {
+
+    const townGenBtn = $("#townGen");
+    const townData = $("#townData");
+
+    const townNameSpan = $(".townNameSpan");
+
+    const nameGenBtn = $("#nameGen");
+    const nameCol1 = $("#nameGenCol1");
+    const nameCol2 = $("#nameGenCol2");
+
+    const addPeasantBtn = $("#peasantAddBtn").hide();
+
+    const runSimBtn = $("#runSim");
+    const simOutput = $("#simulationOutput");
+
+    let peasantGen = [];
+    let simLog = [];
+
+    let town;
+    let lang;
 
     // Setup show/hide behavior for h2
     $("h2").click(event => {
-    
-        console.log(event.currentTarget)
-
         let section = $(event.currentTarget).data("section");
         $(".section"+section).toggle();
-
-
     });
 
     // Generates town / culture information
@@ -120,62 +119,101 @@ $(document).ready(function() {
 
     });
 
-});
+    // Cycles the simulation when the button is pressed
+    runSimBtn.click(function() {
+        cycleSimulation();
+    });
 
-function updateTownDisplay() {
-    // Display town data
-    townData.empty()
-    townData
-        .append($("<td>").text(capitalize(lang.lexicon[0].text)))
-        .append($("<td>").text(lang.name))
-        .append($("<td>").text(town.popSize))
-        .append($("<td>").text(town.lifeExpectancy))
-}
+    // Runs one step of the simulation
+    function cycleSimulation() {
+        let oldAge = town.lifeExpectancy * 0.8;
+        let maxLife = town.lifeExpectancy * 1.2;
 
-function randomWord(minLength = 1, maxLength = 10) {
+        for (peasant of town.people) {
+            peasant.age++;
+            
+        }
+        postToSimOutput("A year has passed.");
 
-    let index = Math.floor(Math.random() * 500);
-    let selection = lang.lexicon[index];
-
-    if (selection.syllables >= minLength && selection.syllables <= maxLength) {
-        return selection.text;
-    } else {
-        return randomWord(minLength, maxLength)
-    }
-}
-
-function capitalize(word) {
-
-    let newWord = word.charAt(0).toUpperCase() + word.slice(1);
-    return newWord;
-}
-
-function updateConsole() {
-    console.clear();
-    console.log(town);
-    console.log(lang);
-}
-
-function clearGen() {
-    nameCol1.empty();
-    nameCol2.empty();
-    peasantGen = [];
-}
-
-class Peasant {
-    constructor(name, job, age) {
-        this.name = capitalize(name);
-        this.age = age;
-        this.job = job;
+        updateConsole();
+        updateTownDisplay();
     }
 
-    getJob() {
-        if (this.age > 11) {
-            return this.job;
-        } else if (this.age > 6) {
-            return "apprentice " + this.job;
-        } else {
-            return "child"
+    function updateTownDisplay() {
+        // Display town data
+        townData.empty()
+        townData
+            .append($("<td>").text(capitalize(lang.lexicon[0].text)))
+            .append($("<td>").text(lang.name))
+            .append($("<td>").text(town.popSize))
+            .append($("<td>").text(town.lifeExpectancy))
+    }
+    
+    function postToSimOutput(text) {
+        
+        // Put notice in the array, then delete the earliest one if there's too many
+        simLog.push(text);
+        if (simLog.length > 10) {
+            simLog.shift();
+        }
+        
+        // Empty simlog and repopulate
+        simOutput.empty();
+
+        for (log of simLog) {
+
+            let listObj = $("<li>").text(log);
+            simOutput.append(listObj);
+
         }
     }
-}
+    
+    function randomWord(minLength = 1, maxLength = 10) {
+
+        let index = Math.floor(Math.random() * 500);
+        let selection = lang.lexicon[index];
+
+        if (selection.syllables >= minLength && selection.syllables <= maxLength) {
+            return selection.text;
+        } else {
+            return randomWord(minLength, maxLength)
+        }
+    }
+
+    function capitalize(word) {
+
+        let newWord = word.charAt(0).toUpperCase() + word.slice(1);
+        return newWord;
+    }
+
+    function updateConsole() {
+        console.clear();
+        console.log(town);
+        console.log(lang);
+    }
+
+    function clearGen() {
+        nameCol1.empty();
+        nameCol2.empty();
+        peasantGen = [];
+    }
+
+    class Peasant {
+        constructor(name, job, age) {
+            this.name = capitalize(name);
+            this.age = age;
+            this.job = job;
+        }
+
+        getJob() {
+            if (this.age > 11) {
+                return this.job;
+            } else if (this.age > 6) {
+                return "apprentice " + this.job;
+            } else {
+                return "child"
+            }
+        }
+    }
+
+});
