@@ -126,17 +126,33 @@ $(document).ready(function() {
 
     // Runs one step of the simulation
     function cycleSimulation() {
+        // Setup variables
         let oldAge = town.lifeExpectancy * 0.8;
         let maxLife = town.lifeExpectancy * 1.2;
+        let dangerZone = maxLife - oldAge;
 
-        for (peasant of town.people) {
+        // Age up everyone
+        for (i = 0; i < town.people.length; i++) {
+            let peasant = town.people[i];
             peasant.age++;
-            
+
+            // Old peasants have a chance of dying
+            if (peasant.age > oldAge) {
+
+                let deathChance = (peasant.age - oldAge)/dangerZone;
+
+                if (Math.random() < deathChance) {
+                    postToSimOutput(peasant.name + " has died of old age at " + peasant.age + ".");
+                    town.people.splice(i, 1);
+                }
+
+            }
         }
         postToSimOutput("A year has passed.");
-
+        
         updateConsole();
         updateTownDisplay();
+        console.log(town.people);
     }
 
     function updateTownDisplay() {
