@@ -20,6 +20,44 @@ $(document).ready(function() {
     let town;
     let lang;
 
+    let logOutputPause = true;
+
+    // Add one update per second to the log
+    let logOutputTimer = setInterval( function() {
+
+        // run if not paused
+        if ( !logOutputPause) {
+
+            // Empty simlog and repopulate
+            simOutput.empty();
+
+            let logLength = (simLog.length < 10) ? simLog.length : 10;
+    
+            // Print the first ten items
+            for (i = 0; i < logLength; i++) {
+    
+                let listObj;
+                let log = simLog[i];
+                
+                // This lets us bold important messages by prefixing "**"
+                if (log.substring(0,2) == "**") {
+                    listObj = $("<li>").html("<strong>" + log.substring(2, log.length) + "</strong>")
+                } else {
+                    listObj= $("<li>").text(log);
+                }
+                
+                simOutput.append(listObj);
+
+            }
+    
+            // If there are more than 10 items, delete the oldest one
+            if (simLog.length > 10) {
+                simLog.shift();
+            }
+        }
+
+    }, 1000);
+
     // Setup show/hide behavior for h2
     $("h2").click(event => {
         let section = $(event.currentTarget).data("section");
@@ -115,9 +153,10 @@ $(document).ready(function() {
     runSimBtn.click(function() {
         if (town.people.length > 0) {
             cycleSimulation();
+            logOutputPause = false;
         } else {
             simLog = []
-            postToSimOutput("Your town is empty. Add some peasants to start the simulation.")
+            simLog.push("Your town is empty. Add some peasants to start the simulation.")
         }
     });
 
@@ -185,11 +224,11 @@ $(document).ready(function() {
         let minBirthingAge = 20;
         let maxBirthingAge = 45;
 
-        // Update each peasant's circumstances
+        // Update each peasant
         for (i = 0; i < town.people.length; i++) {
             let peasant = town.people[i];
 
-            // Age everyone up, then check mortality
+            // Age up, then check mortality
             peasant.age++;
 
             // Are they still alive? First check old age
@@ -198,7 +237,7 @@ $(document).ready(function() {
                 let deathChance = (peasant.age - oldAge)/dangerZone;
 
                 if (Math.random() < deathChance) {
-                    postToSimOutput(peasant.name + " has died of old age at " + peasant.age + ".");
+                    simLog.push(peasant.name + " has died of old age at " + peasant.age + ".");
                     town.people.splice(i, 1);
                     continue;
                 }
@@ -207,7 +246,7 @@ $(document).ready(function() {
             // Next, check infant mortality
             else if (peasant.age < infantMortLimit) {
                 if (Math.random() < infantMortRate) {
-                    postToSimOutput(peasant.name + ", " + peasant.age + ", has died too soon.");
+                    simLog.push(peasant.name + ", " + peasant.age + ", has died too soon.");
                     town.people.splice(i, 1);
                     continue;
                 }
@@ -227,10 +266,10 @@ $(document).ready(function() {
 
                     // Announcement changes based on mom's survival
                     if (momSurvives) {
-                        postToSimOutput(peasant.name + "'s baby was stillborn.")
+                        simLog.push(peasant.name + "'s baby was stillborn.")
                         peasant.isPregnant = false;
                     } else {
-                        postToSimOutput(peasant.name + " and her baby have died in childbirth.")
+                        simLog.push(peasant.name + " and her baby have died in childbirth.")
                         town.people.splice(i, 1);
                     }
 
@@ -246,13 +285,13 @@ $(document).ready(function() {
                     // As before, announcement changes based on whether the mom survived
                     if (momSurvives) {
 
-                        postToSimOutput(peasant.name + " gave birth to a baby " + babySex + "!  " + "She names " + newPeasant.pronouns[1] + " " + newPeasant.name + ".");
+                        simLog.push(peasant.name + " gave birth to a baby " + babySex + "!  " + "She names " + newPeasant.pronouns[1] + " " + newPeasant.name + ".");
 
                         peasant.isPregnant = false;
 
                     } else {
 
-                        postToSimOutput(peasant.name + " died giving birth to a baby " + babySex + "!  " + "Her grieving relatives name the child " + newPeasant.name + ".")
+                        simLog.push(peasant.name + " died giving birth to a baby " + babySex + "!  " + "Her grieving relatives name the child " + newPeasant.name + ".")
 
                         town.people.splice(i, 1);
 
@@ -265,7 +304,7 @@ $(document).ready(function() {
 
             // Otherwise there's a slight chance of dying from life events
             else if (Math.random() < baseDeathRate) {
-                postToSimOutput(peasant.name + ", " + peasant.age + ", has died in an accident.");
+                simLog.push(peasant.name + ", " + peasant.age + ", has died in an accident.");
                 town.people.splice(i, 1);
                 continue;
             }
@@ -275,13 +314,13 @@ $(document).ready(function() {
                 if (minBirthingAge < peasant.age && peasant.age < maxBirthingAge) {
                     if (Math.random() < fertilityRate) {
                         peasant.isPregnant = true;
-                        postToSimOutput(peasant.name + ", " + peasant.age + ", is pregnant.")
+                        simLog.push(peasant.name + ", " + peasant.age + ", is pregnant.")
                     }
                 }
             }
 
         }
-        postToSimOutput("**A year has passed.");
+        simLog.push("**A year has passed.");
 
         updateConsole();
         updateTownDisplay();
@@ -297,34 +336,7 @@ $(document).ready(function() {
             .append($("<td>").text(town.people.length))
             .append($("<td>").text(town.lifeExpectancy))
     }
-    
-    function postToSimOutput(text) {
-        
-        // Put notice in the array, then delete the earliest one if there's too many
-        simLog.push(text);
-        if (simLog.length > 10) {
-            simLog.shift();
-        }
-        
-        // Empty simlog and repopulate
-        simOutput.empty();
 
-        for (log of simLog) {
-
-            let listObj;
-            
-            // This lets us bold important messages by prefixing "**"
-            if (log.substring(0,2) == "**") {
-                listObj = $("<li>").html("<strong>" + log.substring(2, log.length) + "</strong>")
-            } else {
-                listObj= $("<li>").text(log);
-            }
-            
-            simOutput.append(listObj);
-
-        }
-    }
-    
     function randomWord(minLength = 1, maxLength = 10) {
 
         let index = Math.floor(Math.random() * 500);
@@ -388,8 +400,6 @@ $(document).ready(function() {
             } else {
                 this.sex = sex;
             }
-
-
         }
 
         getJob() {
