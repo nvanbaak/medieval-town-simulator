@@ -155,9 +155,8 @@ $(document).ready(function() {
 
         /* PREGNANCY MECHANICS
         /
-        / All eligible women have a percent chance of becoming
-        / pregnant each year. Eligibility uses the following 
-        / criteria:
+        / All eligible women have a chance of becoming pregnant 
+        / each year. Eligibility uses the following criteria:
         /
         / * MARRIED: not implemented yet
         /
@@ -182,7 +181,7 @@ $(document).ready(function() {
 
         let baseDeathRate = 0.01;
         
-        let fertilityRate = 0.2; // placeholder value until relationships / fertile years are implemented
+        let fertilityRate = 0.23; // placeholder value
         let minBirthingAge = 20;
         let maxBirthingAge = 45;
 
@@ -207,7 +206,7 @@ $(document).ready(function() {
             
             // Next, check infant mortality
             else if (peasant.age < infantMortLimit) {
-                if (Math.random() < 0.04) {
+                if (Math.random() < infantMortRate) {
                     postToSimOutput(peasant.name + ", " + peasant.age + ", has died too soon.");
                     town.people.splice(i, 1);
                     continue;
