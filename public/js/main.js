@@ -126,17 +126,19 @@ $(document).ready(function() {
 
     // Runs one step of the simulation
     function cycleSimulation() {
-        // Setup variables
+        // Peasant death variables
         let oldAge = town.lifeExpectancy * 0.9;
         let maxLife = town.lifeExpectancy * 1.4;
         let dangerZone = maxLife - oldAge;
+        let infantMort = 10;
+        let baseDeathRate = 0.01
 
         // Age up everyone
         for (i = 0; i < town.people.length; i++) {
             let peasant = town.people[i];
             peasant.age++;
 
-            // Old peasants have a chance of dying
+            // Are they still alive? First check old age
             if (peasant.age > oldAge) {
 
                 let deathChance = (peasant.age - oldAge)/dangerZone;
@@ -144,9 +146,25 @@ $(document).ready(function() {
                 if (Math.random() < deathChance) {
                     postToSimOutput(peasant.name + " has died of old age at " + peasant.age + ".");
                     town.people.splice(i, 1);
+                    continue;
                 }
-
             }
+            // Young peasants also have a change of dying (infant mortality in the middle ages was terrible)
+            else if (peasant.age < infantMort) {
+                if (Math.random() < 0.10) {
+                    postToSimOutput(peasant.name + ", " + peasant.age + ", has died.");
+                    town.people.splice(i, 1);
+                    continue;
+                }
+            }
+
+            // Otherwise there's a slight chance of dying from life events
+            else if (Math.random() < baseDeathRate) {
+                postToSimOutput(peasant.name + ", " + peasant.age + ", has died in an accident.");
+                town.people.splice(i, 1);
+                continue;
+            }
+
         }
         postToSimOutput("A year has passed.");
         
