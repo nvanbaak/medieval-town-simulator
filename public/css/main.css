@@ -17,6 +17,20 @@ h1, h2 {
     text-align: center;
 }
 
+h2 {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+
+    cursor: pointer;
+}
+
+h2:hover {
+
+    background-color: rgb(200, 212, 226);
+
+}
+
 .flexbox {
     display: flex;
     flex-direction: column;

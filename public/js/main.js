@@ -7,7 +7,7 @@ const nameGenBtn = $("#nameGen");
 const nameCol1 = $("#nameGenCol1");
 const nameCol2 = $("#nameGenCol2");
 
-const addPeasantBtn = $("#PeasantAddBtn").hide();
+const addPeasantBtn = $("#peasantAddBtn").hide();
 
 let peasantGen = [];
 

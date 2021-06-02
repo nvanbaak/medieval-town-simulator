@@ -14,29 +14,30 @@
         <main>
             <h1>Medieval Town Simulator</h1>
 
-            <hr>
-
+            <!-- Town Section -->
             <section class="flexbox">
                 <h2>Build a Town!</h2>
-                <button id="townGen">Build</button>
-                <table>
-                    <tr>
-                        <th>Town</th>
-                        <th>Language</th>
-                        <th>Population</th>
-                        <th>Life Expectancy</th>
-                    </tr>
-                    <tr id="townData">
-                        <td>N/A</td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                </table>
+                <div class="section1collapse flexbox">
+
+                    <button id="townGen">Build</button>
+                    <table>
+                        <tr>
+                            <th>Town</th>
+                            <th>Language</th>
+                            <th>Population</th>
+                            <th>Life Expectancy</th>
+                        </tr>
+                        <tr id="townData">
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                    </table>
+                </div>
             </section>
 
-            <hr>
-
+            <!-- Peasant Generation -->
             <section class="flexbox">
                 <h2>Generate Some Peasants!</h2>
                 <button id="nameGen" disabled="true">Generate</button>
@@ -48,9 +49,13 @@
                         <ul id="nameGenCol2" class="nameCol"></ul>
                     </div>
                 </div>
-                <button id="PeasantAddBtn">Add These Peasants to <span class="townNameSpan"></span></button>
+                <button id="peasantAddBtn">Add These Peasants to <span class="townNameSpan"></span></button>
             </section>
 
+            <!-- Simulator -->
+            <section>
+                <h2>Simulate!</h2>
+            </section>
         </main>
 
         <script src="../js/main.js"></script>
