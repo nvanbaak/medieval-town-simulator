@@ -49,7 +49,7 @@ $(document).ready(function() {
                 simOutput.append(listObj);
 
             }
-    
+
             // If there are more than 10 items, delete the oldest one
             if (simLog.length > 10) {
                 simLog.shift();
@@ -271,6 +271,7 @@ $(document).ready(function() {
                     } else {
                         simLog.push(peasant.name + " and her baby have died in childbirth.")
                         town.people.splice(i, 1);
+                        continue;
                     }
 
                 } 
@@ -294,6 +295,7 @@ $(document).ready(function() {
                         simLog.push(peasant.name + " died giving birth to a baby " + babySex + "!  " + "Her grieving relatives name the child " + newPeasant.name + ".")
 
                         town.people.splice(i, 1);
+                        continue;
 
                     }
 
