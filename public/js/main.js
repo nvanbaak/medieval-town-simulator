@@ -16,6 +16,17 @@ let lang;
 
 $(document).ready(function() {
 
+    // Setup show/hide behavior for h2
+    $("h2").click(event => {
+    
+        console.log(event.currentTarget)
+
+        let section = $(event.currentTarget).data("section");
+        $(".section"+section).toggle();
+
+
+    });
+
     // Generates town / culture information
     townGenBtn.click(function() {
 

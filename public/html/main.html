@@ -16,8 +16,8 @@
 
             <!-- Town Section -->
             <section class="flexbox">
-                <h2>Build a Town!</h2>
-                <div class="section1collapse flexbox">
+                <h2 data-section="1">Build a Town!</h2>
+                <div class="flexbox section1">
 
                     <button id="townGen">Build</button>
                     <table>
@@ -39,22 +39,27 @@
 
             <!-- Peasant Generation -->
             <section class="flexbox">
-                <h2>Generate Some Peasants!</h2>
-                <button id="nameGen" disabled="true">Generate</button>
-                <div class="nameBox">
-                    <div class="col" >
-                        <ul id="nameGenCol1" class="nameCol"></ul>
+                <h2 data-section="2">Generate Some Peasants!</h2>
+                <div class="flexbox section2">
+                    <button id="nameGen" disabled="true">Generate</button>
+                    <div class="nameBox">
+                        <div class="col">
+                            <ul id="nameGenCol1" class="nameCol"></ul>
+                        </div>
+                        <div class="col">
+                            <ul id="nameGenCol2" class="nameCol"></ul>
+                        </div>
                     </div>
-                    <div class="col" >
-                        <ul id="nameGenCol2" class="nameCol"></ul>
-                    </div>
+                    <button id="peasantAddBtn">Add These Peasants to <span class="townNameSpan"></span></button>
                 </div>
-                <button id="peasantAddBtn">Add These Peasants to <span class="townNameSpan"></span></button>
             </section>
 
             <!-- Simulator -->
             <section>
-                <h2>Simulate!</h2>
+                <h2 data-section="3">Simulate!</h2>
+                <div class="flexbox section3">
+
+                </div>
             </section>
         </main>
 
