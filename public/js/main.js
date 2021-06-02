@@ -130,21 +130,39 @@ $(document).ready(function() {
         / 
         / * INFANT MORTALITY: we check from birth until age 10 
         / (Source: https://academic.oup.com/ije/article/34/6/1435/707557).
-        / * Young peasants have a 4% chance of dying (which over 
-        / 10 years equates to about a 2/3rds chance of surviving 
-        / childhood (which tracks with the usual figure of 30+% youth mortality, see e.g. https://www.thoughtco.com/medieval-child-surviving-infancy-1789124#:~:text=The%20highest%20estimated%20percentage%20I,modern%20science%20has%20thankfully%20overcome.)
+        / * Young peasants have a 4% chance of dying per year 
+        / (which over 10 years equates to about a 2/3rds chance 
+        / of surviving childhood (which tracks with the usual 
+        / figure of 30+% youth mortality, see e.g. https://www.thoughtco.com/medieval-child-surviving-infancy-1789124#:~:text=The%20highest%20estimated%20percentage%20I,modern%20science%20has%20thankfully%20overcome.)
         /
         / * PREGNANCY: "Daily Life in Medieval Europe" gives a 
         / figure of 14.4 deaths per 1,000 births in Florence 
         / (source: https://www.reddit.com/r/pureasoiaf/comments/id91pt/the_definite_guide_to_childbirth_mortality_in/); 
         / other numbers found while googling put the number in 
         / the 1-3% range, so 1.5% is a good ballpark
-        / * About 50% of births are successful according to http://www.kyrackramer.com/2019/03/25/medieval-fertility-rates/
+        / * About 50% of medieval births were successful, 
+        / according to http://www.kyrackramer.com/2019/03/25/medieval-fertility-rates/
         / 
         / * Finally, if none of these apply to a peasant, they 
         / have a 1% chance of dying anyways (household accident, 
         / disease, crime, etc.)
         */ 
+
+        /* PREGNANCY MECHANICS
+        /
+        / All eligible women have a percent chance of becoming
+        / pregnant each year. Eligibility uses the following 
+        / criteria:
+        /
+        / * MARRIED: not implemented yet
+        /
+        / * PREMARITAL RELATIONSHIP: not implemented yet
+        /
+        / * AGE: while medieval women got married super early, 
+        / they didn't start having children until their 20's (source: https://www.quora.com/What-was-the-average-age-of-women-when-they-had-their-first-baby-in-the-Middle-Ages).
+        / * Everyone hits menopause at 45. 
+        / 
+        */
 
         // Defines the range in which old age checks occur.
         let oldAge = town.lifeExpectancy * 0.8;
@@ -160,10 +178,14 @@ $(document).ready(function() {
         let baseDeathRate = 0.01;
         
         let fertilityRate = 0.2; // placeholder value until relationships / fertile years are implemented
+        let minBirthingAge = 20;
+        let maxBirthingAge = 45;
 
-        // Age up everyone
+        // Update each peasant's circumstances
         for (i = 0; i < town.people.length; i++) {
             let peasant = town.people[i];
+
+            // Age everyone up, then check mortality
             peasant.age++;
 
             // Are they still alive? First check old age
@@ -213,7 +235,7 @@ $(document).ready(function() {
                 else {
 
                     let newPeasant = makeRandomPeasant(town);
-                    newPeasant.age = 0;
+                    newPeasant.age = -1; // We're adding them to the end of the array, so the loop will hit them and ++ their age to 0 before it finishes
                     let babySex = ((newPeasant.sex == "m") ? "boy" : "girl");
                     town.people.append(newPeasant);
 
@@ -242,6 +264,16 @@ $(document).ready(function() {
                 postToSimOutput(peasant.name + ", " + peasant.age + ", has died in an accident.");
                 town.people.splice(i, 1);
                 continue;
+            }
+
+            // Check if peasant gets pregnant
+            if (peasant.sex == "f") {
+                if (minBirthingAge < peasant.age < maxBirthingAge) {
+                    if (Math.random() < fertilityRate) {
+                        peasant.isPregnant = true;
+                        postToSimOutput(peasant.name + " is pregnant.")
+                    }
+                }
             }
 
         }
