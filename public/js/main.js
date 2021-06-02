@@ -66,19 +66,12 @@ $(document).ready(function() {
 
         // Get culture information
         updateConsole();
-        let jobList = town.economy.jobs;
-        let lifeExp = town.lifeExpectancy;
-        let minNameSize = 2;
 
         // Make ten peasants, store in data and print to page
         for (i = 0; i < 10; i++) {
 
-            // Get random peasant information within culture parameters
-            myJob = jobList[Math.floor(Math.random() * jobList.length)];
-            myLifeExp = Math.floor(Math.random() * lifeExp * 1.2);
-
-            // Make new peasant, push to the appropriate places
-            newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
+            let minNameLength = 2;
+            let newPeasant = makeRandomPeasant(town, minNameLength);
 
             peasantGen.push(newPeasant);
 
@@ -125,12 +118,48 @@ $(document).ready(function() {
 
     // Runs one step of the simulation
     function cycleSimulation() {
-        // Peasant death variables
-        let oldAge = town.lifeExpectancy * 0.9;
+
+        /* MORTALITY MECHANICS
+        /
+        / The main sources of mortality are each checked once per 
+        / year:
+        /
+        / * OLD AGE: sources put medieval life expectancy at 
+        / 40-50. Chance of old age death increases starting at 
+        / age 40.
+        / 
+        / * INFANT MORTALITY: we check from birth until age 10 
+        / (Source: https://academic.oup.com/ije/article/34/6/1435/707557).
+        / * Young peasants have a 4% chance of dying (which over 
+        / 10 years equates to about a 2/3rds chance of surviving 
+        / childhood (which tracks with the usual figure of 30+% youth mortality, see e.g. https://www.thoughtco.com/medieval-child-surviving-infancy-1789124#:~:text=The%20highest%20estimated%20percentage%20I,modern%20science%20has%20thankfully%20overcome.)
+        /
+        / * PREGNANCY: "Daily Life in Medieval Europe" gives a 
+        / figure of 14.4 deaths per 1,000 births in Florence 
+        / (source: https://www.reddit.com/r/pureasoiaf/comments/id91pt/the_definite_guide_to_childbirth_mortality_in/); 
+        / other numbers found while googling put the number in 
+        / the 1-3% range, so 1.5% is a good ballpark
+        / * About 50% of births are successful according to http://www.kyrackramer.com/2019/03/25/medieval-fertility-rates/
+        / 
+        / * Finally, if none of these apply to a peasant, they 
+        / have a 1% chance of dying anyways (household accident, 
+        / disease, crime, etc.)
+        */ 
+
+        // Defines the range in which old age checks occur.
+        let oldAge = town.lifeExpectancy * 0.8;
         let maxLife = town.lifeExpectancy * 1.4;
         let dangerZone = maxLife - oldAge;
-        let infantMort = 10;
-        let baseDeathRate = 0.01
+
+        let infantMortLimit = 10;
+        let infantMortRate = 0.04;
+
+        let childbirthMort = 0.015;
+        let stillbornRate = 0.5;
+
+        let baseDeathRate = 0.01;
+        
+        let fertilityRate = 0.2; // placeholder value until relationships / fertile years are implemented
 
         // Age up everyone
         for (i = 0; i < town.people.length; i++) {
@@ -148,13 +177,37 @@ $(document).ready(function() {
                     continue;
                 }
             }
-            // Young peasants also have a change of dying (infant mortality in the middle ages was terrible)
-            else if (peasant.age < infantMort) {
-                if (Math.random() < 0.10) {
-                    postToSimOutput(peasant.name + ", " + peasant.age + ", has died.");
+            
+            // Next, check infant mortality
+            else if (peasant.age < infantMortLimit) {
+                if (Math.random() < 0.04) {
+                    postToSimOutput(peasant.name + ", " + peasant.age + ", has died too soon.");
                     town.people.splice(i, 1);
                     continue;
                 }
+            }
+
+            // Next, resolve pregnancies
+            else if (peasant.isPregnant) {
+                let momSurvives = true;
+                let kidSurvives = true;
+
+                // Check if both parties survive the experience
+                if (Math.random() < childbirthMort) {
+                    momSurvives = false;
+                }
+                if (Math.random() < stillbornRate) {
+                    kidSurvives = false;
+                }
+
+                // Write the appropriate messages
+                if (momSurvives && kidSurvives) {
+
+                    // newPeasant = new Peasant()
+
+                }
+
+
             }
 
             // Otherwise there's a slight chance of dying from life events
@@ -165,8 +218,8 @@ $(document).ready(function() {
             }
 
         }
-        postToSimOutput("A year has passed.");
-        
+        postToSimOutput("**A year has passed.");
+
         updateConsole();
         updateTownDisplay();
         console.log(town.people);
@@ -195,7 +248,15 @@ $(document).ready(function() {
 
         for (log of simLog) {
 
-            let listObj = $("<li>").text(log);
+            let listObj;
+            
+            // This lets us bold important messages by prefixing "**"
+            if (log.substring(0,2) == "**") {
+                listObj = $("<li>").html("<strong>" + log.substring(2, log.length) + "</strong>")
+            } else {
+                listObj= $("<li>").text(log);
+            }
+            
             simOutput.append(listObj);
 
         }
@@ -231,11 +292,38 @@ $(document).ready(function() {
         peasantGen = [];
     }
 
+    function makeRandomPeasant(town, minNameSize) {
+        let jobList = town.economy.jobs;
+        let lifeExp = town.lifeExpectancy;
+        let minNameSize = 2;
+
+        // Get random peasant information within culture parameters
+        let myJob = jobList[Math.floor(Math.random() * jobList.length)];
+        let myLifeExp = Math.floor(Math.random() * lifeExp * 1.2);
+
+        // Make new peasant, push to the appropriate places
+        newPeasant = new Peasant(randomWord(minNameSize), myJob, myLifeExp);
+
+        return newPeasant;
+    }
+
     class Peasant {
-        constructor(name, job, age) {
+        constructor(name, job, age, sex = null) {
             this.name = capitalize(name);
             this.age = age;
             this.job = job;
+            this.isPregnant = false;
+
+            // flip a coin for sex assignment if one wasn't provided
+            if (sex == null) {
+                if (Math.random < 0.5) {
+                    this.sex = "m";
+                } else {
+                    this.sex = "f";
+                }
+            } else {
+                this.sex = sex;
+            }
         }
 
         getJob() {
