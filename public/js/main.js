@@ -70,8 +70,7 @@ $(document).ready(function() {
         // Make ten peasants, store in data and print to page
         for (i = 0; i < 10; i++) {
 
-            let minNameLength = 2;
-            let newPeasant = makeRandomPeasant(town, minNameLength);
+            let newPeasant = makeRandomPeasant(town);
 
             peasantGen.push(newPeasant);
 
@@ -237,7 +236,7 @@ $(document).ready(function() {
                     let newPeasant = makeRandomPeasant(town);
                     newPeasant.age = -1; // We're adding them to the end of the array, so the loop will hit them and ++ their age to 0 before it finishes
                     let babySex = ((newPeasant.sex == "m") ? "boy" : "girl");
-                    town.people.append(newPeasant);
+                    town.people.push(newPeasant);
 
                     // As before, announcement changes based on whether the mom survived
                     if (momSurvives) {
@@ -268,10 +267,10 @@ $(document).ready(function() {
 
             // Check if peasant gets pregnant
             if (peasant.sex == "f") {
-                if (minBirthingAge < peasant.age < maxBirthingAge) {
+                if (minBirthingAge < peasant.age && peasant.age < maxBirthingAge) {
                     if (Math.random() < fertilityRate) {
                         peasant.isPregnant = true;
-                        postToSimOutput(peasant.name + " is pregnant.")
+                        postToSimOutput(peasant.name + ", " + peasant.age + ", is pregnant.")
                     }
                 }
             }
@@ -354,7 +353,6 @@ $(document).ready(function() {
     function makeRandomPeasant(town, minNameSize = 2) {
         let jobList = town.economy.jobs;
         let lifeExp = town.lifeExpectancy;
-        let minNameSize = 2;
 
         // Get random peasant information within culture parameters
         let myJob = jobList[Math.floor(Math.random() * jobList.length)];
