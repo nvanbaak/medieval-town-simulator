@@ -1,6 +1,6 @@
 module.exports = class Language {
     constructor() {
-        const syllableWeightMaster = [1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 5];
+        const syllableWeightMaster = [1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4];
 
         this.footprint = generateSoundFootprint();
         this.syllableSet = generateSyllableSet(this.footprint);
