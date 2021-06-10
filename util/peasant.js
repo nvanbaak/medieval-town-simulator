@@ -1,7 +1,6 @@
-
 module.exports = class Peasant {
     constructor(name, job, age, sex = null) {
-        this.name = capitalize(name);
+        this.name = name.charAt(0).toUpperCase() + word.slice(1);
         this.age = age;
         this.job = job;
         this.isPregnant = false;
